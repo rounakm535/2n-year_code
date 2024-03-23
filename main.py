@@ -1,50 +1,23 @@
-import random
+from menu import Menu, MenuItem
+from coffee_maker import CoffeeMaker
+from money_machine import MoneyMachine
 
-# Snake Water Gun or Rock Paper Scissors
-def gameWin(comp, you):
-    # If two values are equal, declare a tie!
-    if comp == you:
-        return None
+money_machine = MoneyMachine()
+coffee_maker = CoffeeMaker()
+menu = Menu()
 
-    # Check for all possibilities when computer chose s
-    elif comp == 's':
-        if you=='w':
-            return False
-        elif you=='g':
-            return True
-    
-    # Check for all possibilities when computer chose w
-    elif comp == 'w':
-        if you=='g':
-            return False
-        elif you=='s':
-            return True
-    
-    # Check for all possibilities when computer chose g
-    elif comp == 'g':
-        if you=='s':
-            return False
-        elif you=='w':
-            return True
+is_on = True
 
-print("Comp Turn: Snake(s) Water(w) or Gun(g)?")
-randNo = random.randint(1, 3) 
-if randNo == 1:
-    comp = 's'
-elif randNo == 2:
-    comp = 'w'
-elif randNo == 3:
-    comp = 'g'
 
-you = input("Your Turn: Snake(s) Water(w) or Gun(g)?")
-a = gameWin(comp, you)
-
-print(f"Computer chose {comp}")
-print(f"You chose {you}")
-
-if a == None:
-    print("The game is a tie!")
-elif a:
-    print("You Win!")
-else:
-    print("You Lose!")
+while is_on:
+    options = menu.get_items()
+    choice = input(f"What would you like? ({options}): ")
+    if choice == "off":
+        is_on = False
+    elif choice == "report":
+        coffee_maker.report()
+        money_machine.report()
+    else:
+        drink = menu.find_drink(choice)
+        if coffee_maker.is_resource_sufficient(drink) and money_machine.make_payment(drink.cost) :
+            coffee_maker.make_coffee(drink)
